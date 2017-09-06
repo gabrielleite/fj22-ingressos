@@ -18,7 +18,7 @@ import br.com.caelum.ingresso.dao.SalaDao;
 import br.com.caelum.ingresso.dao.SessaoDao;
 import br.com.caelum.ingresso.model.Sessao;
 import br.com.caelum.ingresso.model.form.SessaoForm;
-import br.com.caelum.ingresso.validacao.GerenciadorDeSessoes;
+import br.com.caelum.ingresso.validacao.GerenciadorDeSessao;
 
 @Controller
 public class SessaoController {
@@ -53,7 +53,7 @@ public class SessaoController {
 		
 		List<Sessao> sessoesDaSala = sessaoDao.buscaSessoesDaSala(sessao.getSala());
 		
-		GerenciadorDeSessoes gerenciador = new GerenciadorDeSessoes(sessoesDaSala);
+		GerenciadorDeSessao gerenciador = new GerenciadorDeSessao(sessoesDaSala);
 		
 		if (gerenciador.cabe(sessao)) {
 			sessaoDao.save(sessao);

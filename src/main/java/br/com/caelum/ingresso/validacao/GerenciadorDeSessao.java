@@ -1,15 +1,16 @@
 package br.com.caelum.ingresso.validacao;
 
-import java.time.LocalTime;
+import java.time.LocalDate;
+import java.time.LocalDateTime;
 import java.util.List;
 import java.util.Optional;
 
 import br.com.caelum.ingresso.model.Sessao;
 
-public class GerenciadorDeSessoes {
+public class GerenciadorDeSessao {
 	private List<Sessao> sessoesDaSala;
 
-	public GerenciadorDeSessoes(List<Sessao> sessoesDaSala) {
+	public GerenciadorDeSessao(List<Sessao> sessoesDaSala) {
 		this.sessoesDaSala = sessoesDaSala;
 	}
 
@@ -22,29 +23,22 @@ public class GerenciadorDeSessoes {
 	}
 
 	private boolean horarioIsValido(Sessao sessaoExistente, Sessao sessaoAtual) {
-		LocalTime horarioSessao = sessaoExistente.getHorario();
-		LocalTime horarioAtual = sessaoAtual.getHorario();
+		LocalDate hoje = LocalDate.now();
+		
+		LocalDateTime horarioSessao = sessaoExistente.getHorario().atDate(hoje);
+		LocalDateTime horarioAtual = sessaoAtual.getHorario().atDate(hoje);
 		
 		boolean ehAntes = horarioAtual.isBefore(horarioSessao);
 		
 		if (ehAntes) {
 			
-			/*
-			 * Na apostila da seguinte forma:
-			 * 
-			 * return horarioAtual
-			 *			.plusMinutes(sessaoAtual.getFilme().getDuracao().toMinutes())
-			 *			.isBefore(horarioSessao);
-			 *
-			 * Mas a versão abaixo faz o mesmo de forma mais concisa e inteligível.
-			 */
-			return sessaoAtual
-					.getHorarioTermino()
+			return horarioAtual
+					.plus(sessaoAtual.getFilme().getDuracao())
 					.isBefore(horarioSessao);
 		} else {
 			
-			return sessaoExistente
-					.getHorarioTermino()
+			return horarioSessao
+					.plus(sessaoExistente.getFilme().getDuracao())
 					.isBefore(horarioAtual);
 		}
 	}
