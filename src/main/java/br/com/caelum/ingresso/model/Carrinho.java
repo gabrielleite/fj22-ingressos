@@ -21,12 +21,17 @@ public class Carrinho {
 	}
 
 	public boolean isSelecionado(Lugar lugar) {
-		return ingressos.stream().map(Ingresso::getLugar).anyMatch(l -> l.equals(lugar));
+		return ingressos.stream().map(Ingresso::getLugar)
+				.anyMatch(l -> l.equals(lugar));
 	}
 
-	public BigDecimal getTotal(){
+	public BigDecimal getTotal() {
 		return ingressos.stream().map(Ingresso::getPreco)
 				.reduce(BigDecimal::add)
 				.orElse(BigDecimal.ZERO);
+	}
+
+	public Compra toCompra() {
+		return new Compra(ingressos);
 	}
 }
